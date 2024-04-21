@@ -77,14 +77,118 @@ yarn generate-modules
 - `--json, -j` (required): Specifies the path to the input JSON file.
 - `--output, -o` (optional): Specifies the output directory for the generated TypeScript modules. If not provided, the default output directory is `./output-modules`.
 
+### JSON File Requirements
+
+json-module-generator expects a specific structure for the input JSON file. The JSON file should have a hierarchical structure where the leaf nodes are objects with string values. Here's an example of a supported JSON structure:
+
+```json
+{
+  "Primitive": {
+    "Red": {
+      "50": "#ffebee",
+      "500": "#f44336",
+      "900": "#b71c1c"
+    },
+    "Green": {
+      "50": "#e8f5e9",
+      "500": "#4caf50",
+      "900": "#1b5e20"
+    }
+  },
+  "Other": {
+    "White": "#ffffff",
+    "Black": "#000000"
+  }
+}
+```
+
+Please ensure that your input JSON file adheres to this structure for the package to generate the TypeScript modules correctly.
+
 ### Example
 
-(The example usage remains the same as in the previous response.)
+Suppose you have a JSON file named `colors.json` with the following content:
+
+```json
+{
+  "Primitive": {
+    "Red": {
+      "50": "#ffebee",
+      "500": "#f44336",
+      "900": "#b71c1c"
+    },
+    "Green": {
+      "50": "#e8f5e9",
+      "500": "#4caf50",
+      "900": "#1b5e20"
+    }
+  },
+  "Other": {
+    "White": "#ffffff",
+    "Black": "#000000"
+  }
+}
+```
+
+To generate TypeScript modules from this JSON file, run the following command:
+
+```bash
+json-module-generator --json colors.json --output src/colors
+```
+
+This command will generate TypeScript modules in the `src/colors` directory based on the structure of the JSON data. The generated modules will have the following structure:
+
+```
+src/colors
+├── Primitive
+│   └── index.ts
+├── Other.ts
+└── index.ts
+```
+
+The content of the generated files will be:
+
+```tsx
+// ./src/colors/Primitive/index.ts
+export const Red = {
+  50: "#ffebee",
+  500: "#f44336",
+  900: "#b71c1c",
+};
+export const Green = {
+  50: "#e8f5e9",
+  500: "#4caf50",
+  900: "#1b5e20",
+};
+
+// ./src/colors/Other.ts
+export const data = {
+  White: "#ffffff",
+  Black: "#000000",
+};
+
+export const { White, Black } = data;
+
+// ./src/colors/index.ts
+export * as Primitive from "./Primitive";
+export * as Other from "./Other";
+```
+
+You can then import and use the generated modules in your TypeScript project:
+
+```tsx
+import { Primitive, Other } from "./colors";
+console.log(Primitive.Green[50]);
+console.log(Other.White);
+
+import { Red, Green } from "./colors/Primitive";
+console.log(Red[500]);
+console.log(Green[900]);
+
+import { White, Black } from "./colors/Other";
+console.log(White);
+console.log(Black);
+```
 
 ## License
 
 This package is licensed under the MIT License.
-
----
-
-By providing both global and local installation options, users can choose the method that best fits their project setup and requirements. Local installation is often preferred when you want to include json-module-generator as a development dependency for a specific project.
