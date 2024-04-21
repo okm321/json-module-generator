@@ -1,0 +1,29 @@
+{
+  "name": "json-module-generator",
+  "version": "0.1.0",
+  "description": "A package to generate TypeScript modules from JSON",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
+    "json-module-generator": "node dist/index.js"
+  },
+  "bin": {
+    "json-module-generator": "dist/index.js"
+  },
+  "keywords": [
+    "typescript"
+  ],
+  "author": "o_kmkm",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@types/yargs": "^17.0.32",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "yargs": "^17.7.2"
+  }
+}
