@@ -17,7 +17,7 @@ export const generateModulesFromJson = (json: string, outputDir: string) => {
   for (const category in jsonData) {
     const categoryDir = path.join(outputDir, category);
     generateIndexFile(jsonData[category], categoryDir);
-    outputDirFileContent += `export * as ${category} from './${category}';\n`;
+    outputDirFileContent += `export * as ${category} from './${category}'\n`;
   }
 
   fs.writeFileSync(outputDirFile, outputDirFileContent);
@@ -47,12 +47,16 @@ const generateIndexFile = (data: any, dir: string) => {
  */
 const generateDepth0File = (data: any, dir: string) => {
   let content = "export const data = {\n";
+  let exportContent = "export const {\n";
 
   for (const key in data) {
-    content += `  ${key}: "${data[key]}",\n`;
+    content += `  ${key}: '${data[key]}',\n`;
+    exportContent += `  ${key},\n`;
   }
 
-  content += "};\n";
+  content += "}\n";
+  exportContent += "} = data\n";
+  content += exportContent;
   fs.writeFileSync(path.join(dir + ".ts"), content);
 };
 
@@ -70,10 +74,10 @@ const generateDepth1File = (data: any, dir: string) => {
     content += `export const ${key} = {\n`;
 
     for (const key2 in data[key]) {
-      content += `  ${key2}: "${data[key][key2]}",\n`;
+      content += `  ${key2}: '${data[key][key2]}',\n`;
     }
 
-    content += "};\n";
+    content += "}\n";
   }
 
   fs.writeFileSync(path.join(dir, "index.ts"), content);
