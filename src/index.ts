@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { generateModulesFromJson } from "./lib";
 import * as fs from "fs";
 import yargs from "yargs";
